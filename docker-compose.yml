@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: codeanalyzer-postgres
+    environment:
+      POSTGRES_DB: codeanalyzer
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  web:
+    build: .
+    container_name: codeanalyzer-web
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
